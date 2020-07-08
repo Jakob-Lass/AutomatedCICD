@@ -19,7 +19,8 @@ print('Updating from {} to {}'.format(currentVersion,newVersion))
 with open(os.path.join('AutomatedCICD','version.txt'),'w') as f:
     f.write(newVersion)
 
-
+os.system('git pull origin')
+os.system('git merge master')
 os.system('git add AutomatedCICD/version.txt')
 os.system("git commit -m 'Update to version {}'".format(newVersion))
 os.system("git tag -a v{} -m '{}'".format(newVersion,newVersion))
