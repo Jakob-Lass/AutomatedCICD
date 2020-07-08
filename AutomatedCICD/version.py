@@ -12,9 +12,6 @@ def version():
 
     return version
 
-def newSimpleFunction(*args,**kwargs):
-    print(*args,**kwargs)
 
-    
 if __name__ == "__main__":
     print(version())
