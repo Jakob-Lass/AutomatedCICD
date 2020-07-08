@@ -1,14 +1,35 @@
+# This workflows will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
 name: Upload Python Package
 
 on:
   push:
       branches:
-        - release
+        - master
  
 jobs:
-  deploy_PyPI:
+  build_test:
 
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine pytest
+    - name: Install dependencies
+      run: |
+        python -m pytest -vv test
+  
+   
+  deploy_test:
+    needs: [build_test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,7 +37,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
-    - name: Publish to PyPI
+    - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
@@ -24,17 +45,15 @@ jobs:
         pip install setuptools wheel twine
         python setup.py sdist bdist_wheel
         twine upload dist/* --repository-url https://test.pypi.org/legacy/
-
-
   release:
-    needs: [deploy_PyPI]
+    needs: [deploy_test]
     name: Create Release
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: 'Get Previous tag'
       id: previoustag
-      uses: "WyriHaximus/github-action-get-previous-tag@release"
+      uses: "WyriHaximus/github-action-get-previous-tag@master"
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Checkout code
@@ -51,10 +70,3 @@ jobs:
           Changes hopefully apply
         draft: false
         prerelease: false
-
-
-
-
-
-
-  
