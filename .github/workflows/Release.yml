@@ -1,0 +1,60 @@
+
+name: Upload Python Package
+
+on:
+  push:
+      branches:
+        - release
+ 
+jobs:
+  deploy_PyPI:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        pip install setuptools wheel twine
+        python setup.py sdist bdist_wheel
+        twine upload dist/* --repository-url https://test.pypi.org/legacy/
+
+
+  release:
+    needs: [deploy_PyPI]
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@release"
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.previoustag.outputs.tag }}
+        release_name: Release ${{ steps.previoustag.outputs.tag }}
+        body: |
+          Changes hopefully apply
+        draft: false
+        prerelease: false
+
+
+
+
+
+
+  
