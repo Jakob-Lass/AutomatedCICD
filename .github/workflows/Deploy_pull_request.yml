@@ -28,17 +28,20 @@ jobs:
       run: |
         npm install
         python -m pip install --upgrade pip
-        pip install pytest coverage
+        pip install pytest coverage, coveralls
     
     - name: Run coverage test
+      with:
+        github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
         coverage run -m pytest -vv test
+        coveralls
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ".coverage"
+        github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
 
   Update_and_tag:
     needs: [Coverage]
