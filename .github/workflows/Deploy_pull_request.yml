@@ -35,11 +35,10 @@ jobs:
         coverage run -m pytest -vv test
 
     - name: Coveralls
-      uses: AndreMiras/coveralls-python-action@develop
+      uses: coverallsapp/github-action@master
       with:
-        parallel: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ".coverage"
 
   Update_and_tag:
     needs: [Coverage]
