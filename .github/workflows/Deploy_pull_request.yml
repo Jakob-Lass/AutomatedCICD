@@ -35,9 +35,11 @@ jobs:
         coverage run -m pytest -vv test
 
     - name: Coveralls
-      uses: coverallsapp/github-action@master
+      uses: AndreMiras/coveralls-python-action@develop
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   Update_and_tag:
     needs: [Coverage]
