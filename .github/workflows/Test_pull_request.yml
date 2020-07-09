@@ -47,10 +47,15 @@ jobs:
       with:
         node-version: 10.x
 
-    - name: npm install, make test-coverage
+    - name: Install dependencies
       run: |
         npm install
-        make test-coverage
+        python -m pip install --upgrade pip
+        pip install pytest
+    
+    - name: Run coverage test
+      run: |
+        coverage run -m pytest -vv test
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
