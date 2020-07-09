@@ -67,15 +67,3 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  coveralls_finish:
-    needs: [Coverage]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Coveralls Finished
-      uses: AndreMiras/coveralls-python-action@develop
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        parallel-finished: true
