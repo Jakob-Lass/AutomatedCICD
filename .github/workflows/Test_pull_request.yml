@@ -57,6 +57,8 @@ jobs:
         pip install pytest coverage
     
     - name: Run coverage test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coverage run -m pytest -vv test
 
@@ -64,11 +66,9 @@ jobs:
       uses: AndreMiras/coveralls-python-action@develop
       with:
         parallel: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  coveralls_finish:
-    needs: [Coverage]
-    runs-on: ubuntu-latest
-    steps:
     - name: Coveralls Finished
       uses: AndreMiras/coveralls-python-action@develop
       with:
