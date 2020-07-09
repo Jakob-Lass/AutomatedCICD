@@ -11,5 +11,5 @@ The setup is envisioned to be used as follows:
 6) A successful test is required before a merge with the main branch is performed
 7) When merge is issued, automatic deployment to PyPI and a release on github is performed
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Jakob-Lass/AutomatedCICD/Test%20pull%20request)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Jakob-Lass/AutomatedCICD/Deploy%20pull%20request)
 [![Coverage Status](https://coveralls.io/repos/github/Jakob-Lass/AutomatedCICD/badge.svg?branch=master)](https://coveralls.io/github/Jakob-Lass/AutomatedCICD?branch=master)

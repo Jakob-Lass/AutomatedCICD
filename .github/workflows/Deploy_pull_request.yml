@@ -10,6 +10,7 @@ jobs:
 
   Coverage:
     name: Build
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -34,13 +35,12 @@ jobs:
         coverage run -m pytest -vv test
 
     - name: Coveralls
-      uses: AndreMiras/coveralls-python-action@develop
+      uses: coverallsapp/github-action@master
       with:
-        parallel: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
   Update_and_tag:
+    needs: [Coverage]
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
