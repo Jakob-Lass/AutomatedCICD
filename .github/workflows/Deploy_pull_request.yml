@@ -19,6 +19,8 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git pull
+        git fetch --all --tags
         python update.py
     - name: Push changes
       uses: ad-m/github-push-action@master
@@ -31,7 +33,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [Update_and_tag]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: Create and commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git pull
+          git fetch --all --tags
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
